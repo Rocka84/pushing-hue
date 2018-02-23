@@ -1,18 +1,18 @@
 Pushing Hue
 ===========
 
-Making the Hue hub push status updates to home assistant.
+Making the Hue hub push status updates to home assistant.  
 Because polling is just not good enough.
 
 
-These are just some notes for now, but I'll clean this up eventualy.
+These are just some notes for now, but I'll clean this up eventually.
 
 ## Root
 
 - got new 2.1 hub
   - hardware revision
   - known hw attack impossible
-  - used as temp replacement while hacking the other one - the lights need to work for the lady!
+  - used as a temp replacement while hacking the other one - the lights need to work for the lady!
 - going back to 2.0
   - got root via known hack
   - mixed and matched information from the following resources - Thanks for sharing!
@@ -39,22 +39,22 @@ These are just some notes for now, but I'll clean this up eventualy.
 ## Extracting firmware images
 
 This part is not necessary for what I came up in the end, but my first plan was different.
-Nevertheless extracting and analysing firmware updates before applying then, could come
+Nevertheless extracting and analyzing firmware updates before applying then, could come
 in handy in the future.
 
 - downloaded url are known 
   - or can be guessed
-- some infos were available
+- some info was available
   - rsa key at the end
 - hex viewer
   - found version number between the
-    big blob and thr rsa key
-  - the lenght of the key is some bytes before that 
+    big blob and the rsa key
+  - the length of the key is some bytes before that
   - guess what: its the same before the block
 
 ### patching and exploiting swupdate
 - should run within dumped fs structure
-- override/fske some functions
+- override/fake some functions
 - prefix all paths to use the dump folder
 - exit between extracting and writing to mtds
 
@@ -67,7 +67,7 @@ in handy in the future.
 - ubi image
   - never heard of...
   - but there are tools on github
-    - this one work for me, installed via pip: https://github.com/jrspruitt/ubi_reader
+    - this one worked for me, installed via pip: https://github.com/jrspruitt/ubi_reader
 - extracted fs from root.bin! hell yeah :-)
 
 - tried using opkg from old image
@@ -83,7 +83,7 @@ So far, so good. Now lets look at the actual hue stuff besides the os.
 ## looking for triggers
 
 - looking for some events I could listen to
-  - I don't want (and can't) dissasemble ipbridge binary
+  - I don't want (and can't) disassemble the ipbridge binary
   - needed tools to MitM the zigbee-device not available
     - /dev/Zigbee is a symlink to /dev/ttyUSB0
     - remove link, read from ttyUSB0, push data to simulate /dev/Zigbee
@@ -122,9 +122,9 @@ So far, so good. Now lets look at the actual hue stuff besides the os.
 - clean up...
 - inspect swupdate
 	- ideally there's a way for the mods to survive an upgrade
-	- if not, maybe there's a way to manualy upgrade (parts of) the fw
-- retry bringing ack opkg
-  - being able to install some tools would be really helpfull
+	- if not, maybe there's a way to manually upgrade (parts of) the fw
+- retry bringing back opkg
+  - being able to install some tools would be really helpful
 
 
 to be continued...
