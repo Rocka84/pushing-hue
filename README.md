@@ -32,17 +32,17 @@ These are just some notes for now, but I'll clean this up eventually.
   - seems interesting but complicated
 - opkg is gone in latest firmware
   - noooooo
-  - can it somehow ne brought back?
+  - can it somehow be brought back?
     - I almost always failed in cross compiling
     - maybe extract it from an older fw
 
 ## Extracting firmware images
 
 This part is not necessary for what I came up in the end, but my first plan was different.
-Nevertheless extracting and analyzing firmware updates before applying then, could come
+Nevertheless extracting and analyzing firmware updates before applying them, could come
 in handy in the future.
 
-- downloaded url are known 
+- download url are known 
   - or can be guessed
 - some info was available
   - rsa key at the end
@@ -50,13 +50,22 @@ in handy in the future.
   - found version number between the
     big blob and the rsa key
   - the length of the key is some bytes before that
-  - guess what: its the same before the block
+  - guess what: its the same before the blob
 
 ### patching and exploiting swupdate
-- should run within dumped fs structure
-- override/fake some functions
+
+I used the firmware updating script of the hub to extract the images.
+For that I modified it to run inside a dump of the fs.
+I decided not to publish any patches that could potentialy include
+copyrighted code. But I will briefly describe what changes I made, so once
+you gained access to the hub yourself, you may recreate my steps.
+
 - prefix all paths to use the dump folder
+- override/fake uboot env
+  - define fw_printenv and fw_setenv as shell functions
+  - dump env to file or analyze used values
 - exit between extracting and writing to mtds
+  - leaving the extracted files in the dumps temp dir
 
 - run it with
   - fw image and
@@ -115,6 +124,14 @@ So far, so good. Now lets look at the actual hue stuff besides the os.
     - builtin filter parameter
   - wget to pull/push to hass
   - in between some sed, grep...
+- working for now:
+  - bulbs: state, brightness (not triggering for brightness changes)
+  - motion sensors: presence
+  - dimmer switches: button events
+- sensor names are a hard coded mapping for now :-(
+  - I have yet to find out how to recreate them properly
+    from hue names
+  - or create some configuration system
 
 
 # Todo
