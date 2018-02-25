@@ -69,19 +69,23 @@ hueLightToHass() {
 }
 
 hueSensorToHass() {
-	queryHueSensor "$1"
 	case "$1" in
-	  9) entity_id="sensor.flur_motion_sensor";;
+	  9) entity_id="sensor.flur_motion_sensor"
+		 state="$(getProp presence)";;
+	  2) entity_id="sensor.flur_dimmer"
+		 state="$(getProp buttonevent)";;
 	  *) #info "Unknown sensor $1: $hue_status";
 	  	 return;;
 	esac
 
+	queryHueSensor "$1"
 	id="$(getProp uniqueid)"
 	name="$(getProp name)"
-	presence="$(getProp presence)"
 
-	[ "$presence" == "true" ] && presence="on" || presence="off"
-	state="$(prepareState "$entity_id" "$presence")"
+	[ -z "$state" ] && return
+	[ "$state" == "true" ] && state="on"
+	[ "$state" == "false" ] && state="off"
+	state="$(prepareState "$entity_id" "$state")"
 
 	pushToHass "$entity_id" "$state"
 }
@@ -111,7 +115,8 @@ prepareState() {
 }
 
 getHassState() {
-    wget -q -O - --header="x-ha-access: $hass_pw" "$hass_url/api/states/$1"
+    wget -q -O - --header="x-ha-access: $hass_pw" "$hass_url/api/states/$1" \
+      || echo '{ "state": "", "last_update": 0, "last_change": 0}'
 }
 
 parseLogEntry() {
