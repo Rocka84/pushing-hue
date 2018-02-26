@@ -1,12 +1,34 @@
 #!/bin/ash
 
+# hue2hass - push hue events to hass
+
+## Preparation
+# - place this script on the hue hub
+# - create .hue2hass.secrets in the same folder
+# - define the following four variables in that file
+# - altetnative: set these vars right here, but don't publish them ;-)
+
 hue_user=""
 hue_url="http://127.0.0.1/api/"
 
 hass_pw=""
 hass_url=""
 
-. "$(dirname "$0")/.hue2hass.secrets"
+## Usage
+# ash /path/to/hue2hasd.sh [-v] [-q]
+# parameters
+#  -v  verbose logging
+#  -q  no logging at all
+#
+# example (run in background):
+#  ash /path/to/hue2hasd.sh > /dev/null &
+
+## Logs
+# By default logs are wtitten to stdout and the file 'hass.log'
+# in the same folder as the script
+# The file is truncated to 100 entries when reaching 200 entries.
+
+[ -f "$(dirname "$0")/.hue2hass.secrets" ] && . "$(dirname "$0")/.hue2hass.secrets"
 
 hue_url="${hue_url}${hue_user}"
 
@@ -68,17 +90,19 @@ hueLightToHass() {
 	pushToHass "$entity_id" "$state"
 }
 
+## todo: get rid of hard coding :-|
 hueSensorToHass() {
 	case "$1" in
-	  9) entity_id="sensor.flur_motion_sensor"
-		 state="$(getProp presence)";;
 	  2) entity_id="sensor.flur_dimmer"
-		 state="$(getProp buttonevent)";;
-	  *) #info "Unknown sensor $1: $hue_status";
-	  	 return;;
+	  	 attribute="buttonevent";;
+	  9) entity_id="sensor.flur_motion_sensor"
+	  	 attribute="presence";;
 	esac
+	
+	[ -z "$attribute" ] && return
 
 	queryHueSensor "$1"
+	state="$(getProp "$attribute")"
 	id="$(getProp uniqueid)"
 	name="$(getProp name)"
 
