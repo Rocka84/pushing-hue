@@ -4,15 +4,34 @@ Pushing Hue
 Making the Hue hub push status updates to home assistant.  
 Because polling is just not good enough.
 
+# Features
+- listen to state changes directly on the hue hub
+- push states to home assistant
+- supported devices
+  - bulbs including brightness (not triggering for brightness changes)
+  - motion sensors
+  - temperature sensor (included in motion sensor)
+  - dimmer switches
 
-These are just some notes for now, but I'll clean this up eventually.
+# Caveat
+You need a serial-to-usb adapter and unscrew your hub, probably voiding your warranty.
+I'll take no responsibility whatsoever to what you do to your devices.
+
+# How I did it
+Short version:
+- get shell access to the hub
+- use (b)ash script to
+  - listen to log messages
+  - call the home assistant api
+
+The rest of this document are just some notes for now, but maybe I'll clean this up someday.
 
 ## Root
 
 - got new 2.1 hub
   - hardware revision
   - known hw attack impossible
-  - used as a temp replacement while hacking the other one - the lights need to work for the lady!
+  - used as a temp replacement while hacking the other one - the lights need to work while experimenting
 - going back to 2.0
   - got root via known hack
   - mixed and matched information from the following resources - Thanks for sharing!
@@ -42,7 +61,7 @@ This part is not necessary for what I came up in the end, but my first plan was 
 Nevertheless extracting and analyzing firmware updates before applying them, could come
 in handy in the future.
 
-- download url are known 
+- download urls are known 
   - or can be guessed
 - some info was available
   - rsa key at the end
@@ -57,28 +76,28 @@ in handy in the future.
 I used the firmware updating script of the hub to extract the images.
 For that I modified it to run inside a dump of the fs.
 I decided not to publish any patches that could potentialy include
-copyrighted code. But I will briefly describe what changes I made, so once
+copyrighted code, but I will briefly describe what changes I made. So once
 you gained access to the hub yourself, you may recreate my steps.
 
 - prefix all paths to use the dump folder
 - override/fake uboot env
   - define fw_printenv and fw_setenv as shell functions
-  - dump env to file or analyze used values
+  - dump uboot env to file or analyze used values
 - exit between extracting and writing to mtds
   - leaving the extracted files in the dumps temp dir
 
 - run it with
-  - fw image and
-  - values learned from hexdump as attributes
-- boom! the image is decrypted an split
+  - the fw image and
+  - the values learned from the hexdump as attributes
+- boom! the image is decrypted and split
 - kernel image
   - not of interest for now
 - ubi image
-  - never heard of...
-  - but there are tools on github
-    - this one worked for me, installed via pip: https://github.com/jrspruitt/ubi_reader
+  - never heard of, but there are tools on github
+  - this one worked for me, installed via pip: https://github.com/jrspruitt/ubi_reader
 - extracted fs from root.bin! hell yeah :-)
 
+### well...
 - tried using opkg from old image
   - copied some missing lib - forgot which :doh:
   - Segmentation fault - double-:doh:
@@ -124,12 +143,6 @@ So far, so good. Now lets look at the actual hue stuff besides the os.
     - builtin filter parameter
   - wget to pull/push to hass
   - in between some sed, grep...
-- working for now:
-  - bulbs include brightness (not triggering for brightness changes)
-  - motion sensors
-  - temperature sensor (included in motion sensor)
-  - dimmer switches
-
 
 # Todo
 
@@ -140,5 +153,3 @@ So far, so good. Now lets look at the actual hue stuff besides the os.
 - retry bringing back opkg
   - being able to install some tools would be really helpful
 
-
-to be continued...
