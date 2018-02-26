@@ -90,21 +90,22 @@ hueLightToHass() {
 	pushToHass "$entity_id" "$state"
 }
 
-## todo: get rid of hard coding :-|
 hueSensorToHass() {
-	case "$1" in
-	  2) entity_id="sensor.flur_dimmer"
-	  	 attribute="buttonevent";;
-	  9) entity_id="sensor.flur_motion_sensor"
-	  	 attribute="presence";;
-	esac
-	
-	[ -z "$attribute" ] && return
-
 	queryHueSensor "$1"
+	
+	name="$(getProp "name")"
+	entity_id="sensor.$(getEntityId "$name")"
+
+	type="$(getProp "type")"
+	case "$type" in
+	  "ZLLSwitch") attribute="buttonevent";;
+	  "ZLLPresence") attribute="presence";;
+	  "ZLLTemperature") attribute="temperature";;
+	  *) info "unsupported type '$type' for '$name'"; return;;
+	esac
+
 	state="$(getProp "$attribute")"
-	id="$(getProp uniqueid)"
-	name="$(getProp name)"
+	# id="$(getProp "uniqueid")"
 
 	[ -z "$state" ] && return
 	[ "$state" == "true" ] && state="on"

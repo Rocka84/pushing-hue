@@ -125,13 +125,10 @@ So far, so good. Now lets look at the actual hue stuff besides the os.
   - wget to pull/push to hass
   - in between some sed, grep...
 - working for now:
-  - bulbs: state, brightness (not triggering for brightness changes)
-  - motion sensors: presence
-  - dimmer switches: button events
-- sensor names are a hard coded mapping for now :-(
-  - I have yet to find out how to recreate them properly
-    from hue names
-  - or create some configuration system
+  - bulbs include brightness (not triggering for brightness changes)
+  - motion sensors
+  - temperature sensor (included in motion sensor)
+  - dimmer switches
 
 
 # Todo
