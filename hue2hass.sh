@@ -6,7 +6,7 @@
 # - place this script on the hue hub
 # - create .hue2hass.secrets in the same folder
 # - define the following four variables in that file
-# - altetnative: set these vars right here, but don't publish them ;-)
+# - alternative: set these vars right here, but don't publish them ;-)
 
 hue_user=""
 hue_url="http://127.0.0.1/api/"
@@ -92,7 +92,7 @@ hueLightToHass() {
 
 hueSensorToHass() {
 	queryHueSensor "$1"
-	
+
 	name="$(getProp "name")"
 	entity_id="sensor.$(getEntityId "$name")"
 
@@ -110,6 +110,7 @@ hueSensorToHass() {
 	[ -z "$state" ] && return
 	[ "$state" == "true" ] && state="on"
 	[ "$state" == "false" ] && state="off"
+	[ "$attribute" == "temperature" ] && state="$(echo "$state" | sed 's/\([0-9]\{2\}\)$/.\1/')"
 	state="$(prepareState "$entity_id" "$state")"
 
 	pushToHass "$entity_id" "$state"
