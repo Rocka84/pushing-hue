@@ -11,8 +11,9 @@
 hue_user=""
 hue_url="http://127.0.0.1/api/"
 
-hass_pw=""
 hass_url=""
+# create and use a long loved access token
+hass_token=""
 
 ## Usage
 # ash /path/to/hue2hasd.sh [-v] [-q]
@@ -123,8 +124,7 @@ getEntityId() {
 pushToHass() {
     log "pushToHass entity_id=$1"
     info "state=$2"
-    # echo wget -q -O - --header="x-ha-access: $hass_pw" --post-data "$2" "$hass_url/api/states/$1"
-    wget -q -O - --header="x-ha-access: $hass_pw" --post-data "$2" "$hass_url/api/states/$1" >/dev/null
+    wget -q -O - --header="Authorization: Bearer $hass_token" --post-data "$2" "$hass_url/api/states/$1" >/dev/null
 }
 
 prepareLightState() {
@@ -141,7 +141,7 @@ prepareState() {
 }
 
 getHassState() {
-    wget -q -O - --header="x-ha-access: $hass_pw" "$hass_url/api/states/$1" \
+    wget -q -O - --header="Authorization: Bearer $hass_token" "$hass_url/api/states/$1" \
       || echo '{ "state": "", "last_update": 0, "last_change": 0}'
 }
 
