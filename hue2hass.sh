@@ -102,6 +102,7 @@ hueSensorToHass() {
         "ZLLSwitch") attribute="buttonevent";;
         "ZLLPresence") attribute="presence";;
         "ZLLTemperature") attribute="temperature";;
+        "ZLLLightLevel") attribute="lightlevel";;
         *) info "unsupported type '$type' for '$name'"; return;;
     esac
 
