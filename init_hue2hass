@@ -1,0 +1,23 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=60
+USE_PROCD=1
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+SERVICE_PID_FILE=/var/run/hue2hass.pid
+
+HUE2HASS=/home/hue2hass/hue2hass.sh
+ARGS="-q"
+
+
+start_service() {
+        procd_open_instance
+        procd_set_param command ${HUE2HASS} ${ARGS}
+        procd_close_instance
+}
+
+stop() {
+        service_stop ${HUE2HASS}
+}
