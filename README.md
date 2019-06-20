@@ -108,6 +108,11 @@ you gained access to the hub yourself, you may recreate my steps.
 
 So far, so good. Now lets look at the actual hue stuff besides the os.
 
+### UPDATE
+
+@lyuzashi found a way to re-install opkg, install sudo and a add non-root user! See [this issue](https://github.com/Rocka84/pushing-hue/issues/1) for details.  
+Thanks for sharing!
+
 ## looking for triggers
 
 - looking for some events I could listen to
