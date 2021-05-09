@@ -30,7 +30,7 @@ The rest of this document are just some notes for now, but maybe I'll clean this
 
 - got new 2.1 hub
   - hardware revision
-  - known hw attack impossible
+  - ~~known hw attack impossible~~ I was wrong about that, the attack is still possible. I just didn't try hard enough.
   - used as a temp replacement while hacking the other one - the lights need to work while experimenting
 - going back to 2.0
   - got root via known hack
