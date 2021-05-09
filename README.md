@@ -122,6 +122,13 @@ Thanks for sharing!
     - remove link, read from ttyUSB0, push data to simulate /dev/Zigbee
     - simulating ttys isn't possible (or is it?) with available tools
 
+### UPDATE
+
+The hub internally uses a mqtt broker which can be exposed externally, see https://github.com/Rocka84/pushing-hue/issues/5
+Thanks to @Otamay & @sh00bx for sharing!
+
+
+
 ### logread it is
 
 - spits out a buttload of messages
